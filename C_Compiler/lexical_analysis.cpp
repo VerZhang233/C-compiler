@@ -10,6 +10,7 @@ int main()
 	}
 	LexicalAnalyzer analyzer(infile);
 	analyzer.Analyse();
+	analyzer.printWords();
 	
 
 	return 0;

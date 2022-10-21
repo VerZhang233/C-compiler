@@ -11,14 +11,15 @@
 #define OPERATOR 4 //运算符
 #define OTHER 5 //其他
 
+enum class WordKind;
+
 struct Word {
 	WordKind wk;//种类
 	std::string val;//内容
 };
 
 //功能：定义词法分析器当前支持的所有单词种别
-
-enum class WordKind : unsigned short {
+enum class WordKind : int {
 	undefined,
 	//关键字
 	kw_Int,
@@ -113,7 +114,7 @@ struct Trie {
 	}
 	//插入一个字符串到树中
 	void Insert(const std::string& S, WordKind wk) {
-		int len = S.length();
+		int len = int(S.length());
 		Node* p = root;
 		for (int i = 0; i < len; i++) {
 			if (p->next[S[i]] == NULL) {
@@ -147,5 +148,6 @@ public:
 	LexicalAnalyzer(std::ifstream& infile);
 	void Analyse();
 	std::vector<Word> GetWords();
+	void printWords();
 };
 

@@ -58,9 +58,11 @@ void LexicalAnalyzer::Analyse() {
 		infile.getline(line, 1024); //每次读入1024个字符
 		
 		int ch_type; //读到字符的类型
-		int len = strlen(line);
+		int len = int(strlen(line));
 		int word_length = 0; //记录每一次识别到的词的长度
+		bool is_key_word = true;
 		WordKind Kind = WordKind::undefined; //每一次识别出来的词的类型
+		Node* cur_node = trie->root;
 		for (int i = 0; i < len; i++) {
 			word_length = 0;
 			Kind = WordKind::undefined;
@@ -80,10 +82,10 @@ void LexicalAnalyzer::Analyse() {
 				Kind = WordKind::num;
 				break;
 			case LETTER:
-				bool is_key_word = true;
-				Node* cur_node = trie->root;
+				is_key_word = true;
+				cur_node = trie->root;
 				for (int j = i; j < len; j++) {
-					if (CharType(line[j]) == NUMBER || LETTER) {
+					if (CharType(line[j]) == NUMBER || CharType(line[j]) == LETTER) {
 						word_length++;
 						if (is_key_word && cur_node->next[line[j]] != NULL) {
 							cur_node = cur_node->next[line[j]];
@@ -97,7 +99,7 @@ void LexicalAnalyzer::Analyse() {
 				Kind = (cur_node->wordKind != WordKind::undefined && is_key_word) ? cur_node->wordKind : WordKind::identifier;
 				break;
 			case OPERATOR:
-				Node* cur_node = trie->root;
+				cur_node = trie->root;
 				for (int j = i; j < len; j++) {
 					if (CharType(line[j]) == OPERATOR) {
 						if (cur_node->next[line[j]] != NULL) {
@@ -135,7 +137,7 @@ void LexicalAnalyzer::Analyse() {
 					word += line[j];
 				}
 
-				words.emplace_back(Word{ Kind,word });
+				words.emplace_back(Word{ Kind, word });
 			}
 
 			i += (word_length - 1);
@@ -146,4 +148,58 @@ void LexicalAnalyzer::Analyse() {
 std::vector<Word> LexicalAnalyzer::GetWords()
 {
 	return words;
+}
+
+const static struct {
+	WordKind kind;  const std::string val;
+} info[] = {
+	{ WordKind::undefined,"undefined"},
+	{ WordKind::kw_Int,"int"},
+	{ WordKind::kw_Void,"void" },
+	{ WordKind::kw_If,"if" },
+	{ WordKind::kw_Else,"else" },
+	{ WordKind::kw_While,"while" },
+	{ WordKind::kw_Return,"return" },
+	{ WordKind::identifier,"identifier" },
+	{ WordKind::num,"num" },
+	{ WordKind::op_Add, "+"},
+	{ WordKind::op_Assign, "="},
+	{ WordKind::op_Separ, ","},
+	{ WordKind::op_Delim, ";"},
+	{ WordKind::op_Div, "/"},
+	{ WordKind::op_Eq, "=="},
+	{ WordKind::op_Gt, ">"},
+	{ WordKind::op_Lt, "<"},
+	{ WordKind::op_Mod, "%"},
+	{ WordKind::op_Mul, "*"},
+	{ WordKind::op_Neq, "!="},
+	{ WordKind::op_Ngt, "<="},
+	{ WordKind::op_Nlt, ">="},
+	{ WordKind::op_Sub, "-"},
+	{ WordKind::lComm, "/*"},
+	{ WordKind::rComm, "*/"},
+	{ WordKind::rComm, "//"},
+	{ WordKind::lPara, "("},
+	{ WordKind::rPara, ")"},
+	{ WordKind::lBrace, "{"},
+	{ WordKind::rBrace, "}"},
+	{ WordKind::Max, NULL }
+};
+
+std::ostream& operator<<(std::ostream& os, const WordKind myEnum)
+{
+	std::string s;
+	for (auto item : info) {
+		if (item.kind == myEnum) {
+			os << item.val;
+			break;
+		}
+	}
+	return os;
+}
+
+void LexicalAnalyzer::printWords() {
+	for (auto word : words) {
+		std::cout << word.wk << ' ' << word.val;
+	}
 }
