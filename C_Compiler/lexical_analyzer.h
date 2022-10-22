@@ -4,6 +4,7 @@
 #include<cstring>
 #include<vector>
 #include<string>
+#include"iomanip"
 
 #define SPACE_OR_TAB 1 //空格、"\t"
 #define NUMBER 2 //数字
@@ -67,7 +68,7 @@ const static struct {
 	{ "else", WordKind::kw_Else },
 	{ "while", WordKind::kw_While },
 	{ "return", WordKind::kw_Return },
-	{ NULL, WordKind::Max }
+	{ "", WordKind::Max}
 };
 
 const static struct {
@@ -94,13 +95,13 @@ const static struct {
 	{ WordKind::rPara, ")"},
 	{ WordKind::lBrace, "{"},
 	{ WordKind::rBrace, "}"},
-	{ WordKind::Max, NULL }
+	{ WordKind::Max, "" }
 };
 
 struct Node {
-	int flag;//是否是单词结束
-	Node* next[128];//后继结点
-	WordKind wordKind;//单词种类
+	int flag; //是否是单词结束
+	Node* next[128]; //后继结点
+	WordKind wordKind; //单词种类
 	Node() {//初始化
 		memset(next, NULL, sizeof(next));
 		wordKind = WordKind::undefined;
@@ -129,7 +130,7 @@ struct Trie {
 	//查找是否存在
 	bool Search(std::string& S) {
 		Node* p = root;
-		for (int i = 0; i < S.length(); i++) {
+		for (int i = 0; i < int(S.length()); i++) {
 			p = p->next[S[i]];
 			if (p == NULL) {//不存在
 				return false;

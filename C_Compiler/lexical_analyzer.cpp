@@ -5,7 +5,6 @@ LexicalAnalyzer::LexicalAnalyzer(std::ifstream& infile):infile(infile) {
 
 	//初始化字典树
 	trie = std::make_unique<Trie>();
-	//建立DFA
 	// 关键字
 	for (int i = 0; build_keyWord[i].kind != WordKind::Max; i++) {
 		trie->Insert(build_keyWord[i].key, build_keyWord[i].kind);
@@ -133,7 +132,7 @@ void LexicalAnalyzer::Analyse() {
 				}
 
 				std::string word;
-				for (int j = i; j < i + word_length - 1; i++) {
+				for (int j = i; j < i + word_length; j++) {
 					word += line[j];
 				}
 
@@ -150,40 +149,38 @@ std::vector<Word> LexicalAnalyzer::GetWords()
 	return words;
 }
 
+//用于输出分析结果的表
 const static struct {
-	WordKind kind;  const std::string val;
+	WordKind kind;  const std::string output_info;
 } info[] = {
 	{ WordKind::undefined,"undefined"},
-	{ WordKind::kw_Int,"int"},
-	{ WordKind::kw_Void,"void" },
-	{ WordKind::kw_If,"if" },
-	{ WordKind::kw_Else,"else" },
-	{ WordKind::kw_While,"while" },
-	{ WordKind::kw_Return,"return" },
+	{ WordKind::kw_Int,"kw_Int"},
+	{ WordKind::kw_Void,"kw_Void" },
+	{ WordKind::kw_If,"kw_If" },
+	{ WordKind::kw_Else,"kw_Else" },
+	{ WordKind::kw_While,"kw_While" },
+	{ WordKind::kw_Return,"kw_Return" },
 	{ WordKind::identifier,"identifier" },
 	{ WordKind::num,"num" },
-	{ WordKind::op_Add, "+"},
-	{ WordKind::op_Assign, "="},
-	{ WordKind::op_Separ, ","},
-	{ WordKind::op_Delim, ";"},
-	{ WordKind::op_Div, "/"},
-	{ WordKind::op_Eq, "=="},
-	{ WordKind::op_Gt, ">"},
-	{ WordKind::op_Lt, "<"},
-	{ WordKind::op_Mod, "%"},
-	{ WordKind::op_Mul, "*"},
-	{ WordKind::op_Neq, "!="},
-	{ WordKind::op_Ngt, "<="},
-	{ WordKind::op_Nlt, ">="},
-	{ WordKind::op_Sub, "-"},
-	{ WordKind::lComm, "/*"},
-	{ WordKind::rComm, "*/"},
-	{ WordKind::rComm, "//"},
-	{ WordKind::lPara, "("},
-	{ WordKind::rPara, ")"},
-	{ WordKind::lBrace, "{"},
-	{ WordKind::rBrace, "}"},
-	{ WordKind::Max, NULL }
+	{ WordKind::op_Add, "op_Add"},
+	{ WordKind::op_Assign, "op_Assign"},
+	{ WordKind::op_Separ, "op_Separ"},
+	{ WordKind::op_Delim, "op_Delim"},
+	{ WordKind::op_Div, "op_Div"},
+	{ WordKind::op_Eq, "op_Eq"},
+	{ WordKind::op_Gt, "op_Gt"},
+	{ WordKind::op_Lt, "op_Lt"},
+	{ WordKind::op_Mod, "op_Mod"},
+	{ WordKind::op_Mul, "op_Mul"},
+	{ WordKind::op_Neq, "op_Neq"},
+	{ WordKind::op_Ngt, "op_Ngt"},
+	{ WordKind::op_Nlt, "op_Nlt"},
+	{ WordKind::op_Sub, "op_Sub"},
+	{ WordKind::lPara, "lPara"},
+	{ WordKind::rPara, "rPara"},
+	{ WordKind::lBrace, "lBrace"},
+	{ WordKind::rBrace, "rBrace"},
+	{ WordKind::Max, "" }
 };
 
 std::ostream& operator<<(std::ostream& os, const WordKind myEnum)
@@ -191,7 +188,7 @@ std::ostream& operator<<(std::ostream& os, const WordKind myEnum)
 	std::string s;
 	for (auto item : info) {
 		if (item.kind == myEnum) {
-			os << item.val;
+			os << std::setiosflags(std::ios::left) << std::setw(12) << item.output_info;
 			break;
 		}
 	}
@@ -200,6 +197,6 @@ std::ostream& operator<<(std::ostream& os, const WordKind myEnum)
 
 void LexicalAnalyzer::printWords() {
 	for (auto word : words) {
-		std::cout << word.wk << ' ' << word.val;
+		std::cout << word.wk << "  " << word.val << std::endl;
 	}
 }
