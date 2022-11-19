@@ -1,16 +1,7 @@
 #pragma once
-#include<fstream>
-#include<iostream>
-#include<cstring>
-#include<vector>
-#include<string>
-#include"iomanip"
 
-#define SPACE_OR_TAB 1 //空格、"\t"
-#define NUMBER 2 //数字
-#define LETTER 3 //字母
-#define OPERATOR 4 //运算符
-#define OTHER 5 //其他
+#include"definition.h"
+
 
 enum class WordKind;
 

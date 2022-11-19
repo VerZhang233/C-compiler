@@ -131,7 +131,10 @@
     <ClCompile Include="lexical_analyzer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="definition.h" />
+    <ClInclude Include="G_analysis.h" />
     <ClInclude Include="lexical_analyzer.h" />
+    <ClInclude Include="set_grammar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

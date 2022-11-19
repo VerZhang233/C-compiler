@@ -26,5 +26,14 @@
     <ClInclude Include="lexical_analyzer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="set_grammar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="definition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="G_analysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
